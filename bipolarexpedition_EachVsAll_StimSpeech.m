@@ -1,5 +1,5 @@
 
-function [mDiff,mb_m,mARb_m,binz,frx]=bipolarexpedition_EachVsAll(pt,nchtocheck,windowstocheck)
+function [mDiff,mb_m,mARb_m,binz,frx]=bipolarexpedition_EachVsAll_StimSpeech(pt,nchtocheck,windowstocheck)
 % BIPOLAR PAIR ANALYSIS: EACH VS. ALL
 % see loopbipolarexpedition.m to loop across patients and analyze
 % EC175 and EC183 both have intact 16x16 square grids (channel #s 1:256)

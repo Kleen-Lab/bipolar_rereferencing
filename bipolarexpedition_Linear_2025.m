@@ -488,7 +488,6 @@ function bipolarexpedition_Linear_2025
     %%
     %fig = figure(6); % figure 4
     %set(fig, 'Position', [100, 100, 1300, 900], 'Color', 'w');
-    addpath('/Volumes/Maxone/matlab_utilities-main/convenient/');
     savepath;
     
     for i=1:length(timepos)
@@ -512,7 +511,6 @@ function bipolarexpedition_Linear_2025
     
     legendHandles = [];
     
-    addpath('/Volumes/Maxone/matlab_utilities-main/convenient/graphing_axes/');
     savepath;
     
     subgrids = subplot('Position', [0.06, 0.05, 0.25, 0.38]);
