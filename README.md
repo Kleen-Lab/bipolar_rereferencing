@@ -27,7 +27,7 @@ and place in ```data/``` subfolder in the main working directory.
 
 ## Files of interest 
 
-Run the ```master_script.m``` file to generate the analyses and figures. Information to run all analysis and plots is included in the master_script and the functions it calls.
+Run the ```master_bipolar_2025.m``` file to generate all analyses and figures. Information to run all analysis and plots is included in the master_script and the functions it calls.
 
 The supplementary figure 1 requires python and R to recreate . Refer to ```supp_figure_1_stats.R``` and ```bipolar_supplementary1.py```. 
 
