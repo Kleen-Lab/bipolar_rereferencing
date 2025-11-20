@@ -13,6 +13,7 @@ function [M,Mrefave,Mbp_distance,frx,Mc,Mbp_angle]=bpspectra_EachVsAll_2025(d,sf
 %   Mbpdist is a confusion matrix of the euclidean distances for every bipolar pair (channel x channel)
 %   frx is the frequency index for M (3rd dimension)
 
+% call function to generate spec
 %just getting frequency index
  [~,frx]=spectrogramjk_chronuxmtfft(zeros(1,size(d,1)),sfx,frxrange,[.5,1],0); 
  
