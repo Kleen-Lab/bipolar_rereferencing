@@ -2,26 +2,9 @@ function [elecmatrix,eleclabels,anatomy]=getelecs(pt,clin1TDT2MNI3)
 
 do_opscea_check = false;
 
-%data_root = '/Volumes/SPIKE/data/';
-%if strcmp(data_root, '')
-%	disp("It seems that the $KLEEN_DATA environment variable is not set, you might want to set it and mount the data.");
-%end
-
-data_root = '/data/';
+data_root = getenv("BIPOLAR_DATA");
 
 mainpath=fullfile(data_root, 'imaging');
-% if exist(mainpath,'dir')==0
-% 	mainpath='/Volumes/KLEEN_DRIVE/AN/DATA'; 
-% end
-% if ~(exist(mainpath,'dir')==7) %jk put parenthesis to make it a falsity of entire statement
-% 	msgbox('KLEEN_DRIVE not found, you may need to reconnect?');
-% 	return;
-% end
-
-
-%disp(mainpath);
-
-mainpath='/data/imaging'
 
 ptdir=fullfile(mainpath, pt);
 filepath=fullfile('elecs');
@@ -84,20 +67,6 @@ end
 
 if ~exist('elecmatrix','var')
     elecmatrix=[];
-end
-
-% one last check, in the Chang Lab server
-if isempty(elecmatrix);
-    %disp('checking Chang Lab server, if connected')
-    CL_filepath=fullfile('~/DataMount/data_store2/imaging/subjects/', pt, 'elecs', [typ ext]);
-    CL_filepath_alt=fullfile('~/DataMount/data_store2/imaging/subjects/', pt, 'elecs', [clinfilename_alternate ext]);
-    if exist(CL_filepath)==2
-		load(CL_filepath);
-        %disp(CL_filepath)
-    elseif exist(CL_filepath_alt)==2
-		load(CL_filepath_alt);
-        %disp(CL_filepath_alt)
-	end
 end
 
 

@@ -5,6 +5,7 @@ function [pt, binz, toplot, frx, binsz, Mbp_distance, cm_distance]=fig3_EachVsAl
 % for either 'EC175' or 'EC133' (both have intact 16 x 16 grids)
 % Run this script to save ECXXX_fig3_data.mat
 % Then plot the figure using fig3_plot.m with that .mat file
+    data_root = getenv("BIPOLAR_DATA");
 
     save_mat = true; % save .mat file for later plotting with fig3_plot.m
     
@@ -26,7 +27,6 @@ function [pt, binz, toplot, frx, binsz, Mbp_distance, cm_distance]=fig3_EachVsAl
     
     cm=cool(6); cm(1,:)=[0 0 0];
     
-    data_root = 'data'; % change data root of where 
     % baseline-high-density-data folder is and where to save the .mat file to
     datadir = fullfile(data_root, 'baseline-high-density-data');
     %cd([datadir])

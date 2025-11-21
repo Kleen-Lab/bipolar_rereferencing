@@ -20,9 +20,9 @@ twoSidedPerm = true;
 
 fs = 512; % sampling rate Hz
 
-data_root = 'data';
+data_root = getenv("BIPOLAR_DATA");
 datadir = data_root;
-folderDataBase = '/data/results';
+folderDataBase = fullfile(data_root,'results');
 
 fileSpikes = fullfile(datadir, 'taggedspikes_April2022.mat');
 folderBaseline = fullfile(datadir, 'baseline-high-density-data');

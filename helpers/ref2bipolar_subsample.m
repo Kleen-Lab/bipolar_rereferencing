@@ -3,7 +3,8 @@ function [d] = ref2bipolar_subsample(d,subj)
 % this sub samples the rereferenced data by skipping every intervening
 % electrode
 
-[bipolarN,bipolarT]=xlsread(fullfile('/Users/davidcaldwell/Box/KLEENLAB/KLEEN_DRIVE copy/David/Bipolar project','AN_ElectrodeInfoTDT.xlsx'),subj);
+data_root = getenv("BIPOLAR_DATA");
+[bipolarN,bipolarT]=xlsread(fullfile(data_root,'AN_ElectrodeInfoTDT.xlsx'),subj);
 
 % account for case where subject has less channels recorded, chop off last
 % part of bipolarN row 

@@ -18,7 +18,7 @@ To install the package and have a copy of the code to edit locally, navigate to 
 
 ```https://github.com/Kleen-Lab/bipolar_rereferencing.git```
 
-You will also need to download the Chronux package. [Chronux](https://chronux.org/)
+You will also need the Chronux package. [Chronux](https://chronux.org/). We have packaged a version of Chronux under helpers 
 
 Note that you will have to configure paths in the code to wherever your data is stored. The code is setup such that you have put the data in a specified structure in a ```/data``` folder inside of this code directory, and have a ```/results``` folder inside of this code directory as well. 
 

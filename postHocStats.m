@@ -8,9 +8,9 @@ run2x2plots = 1;
 saveSpikeStats = 0;
 savePlots = 0;
 
-folderDataBase = '/data/results/';
+data_root = getenv("BIPOLAR_DATA");
+folderDataBase = fullfile(data_root,'/results/');
 saveName = {'LL20','LL40','LL100','absDer'};
-saveName = {'absDer'};
 statsStruct = struct;
 
 numch_eachcond = [];
