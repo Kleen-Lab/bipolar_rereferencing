@@ -138,16 +138,16 @@ dSpeech =           dSpeech         (:,:,1:min([size(d,3) size(dSpeech,3)]));
 dNoSpeechNoStim =   dNoSpeechNoStim (:,:,1:min([size(d,3) size(dNoSpeechNoStim,3)]));
 dStim =             dStim           (:,:,1:min([size(d,3) size(dStim,3)]));
 
-disp('Speech windows'); [mSpeech        ,~,~]=bpspectra_EachVsAll_2025(dSpeech,sfx,frxrange,em,nchtocheck,none1sqrt2log3);
-disp('NoSpeechNoStim windows'); [mNoSpeechNoStim,~,~]=bpspectra_EachVsAll_2025(dNoSpeechNoStim,sfx,frxrange,em,nchtocheck,none1sqrt2log3);
-disp('Stim windows'); [mStim          ,~,~]=bpspectra_EachVsAll_2025(dStim,sfx,frxrange,em,nchtocheck,none1sqrt2log3);
+disp('Speech windows'); [mSpeech,~,~,~]=bpspectra_EachVsAll_2025(dSpeech,sfx,frxrange,em,nchtocheck,none1sqrt2log3);
+disp('NoSpeechNoStim windows'); [mNoSpeechNoStim,~,~,~]=bpspectra_EachVsAll_2025(dNoSpeechNoStim,sfx,frxrange,em,nchtocheck,none1sqrt2log3);
+disp('Stim windows'); [mStim,~,~,~]=bpspectra_EachVsAll_2025(dStim,sfx,frxrange,em,nchtocheck,none1sqrt2log3);
 
 %mSpeech = M(:,:,:,(hasSpeechTotal & ~hasStimTotal));
 %mNoSpeechNoStim = M(:,:,:,(~hasSpeechTotal & ~hasStimTotal));
 %mStim = M(:,:,:,(hasStimTotal & ~hasSpeechTotal));
 
 d=d(:,:,windowstocheck); clear Straces_allch; %free up RAM by getting rid of whatever won't be used (only using first ___ number of windows)
-[M,Mbpdist,frx]=bpspectra_EachVsAll_2025(d,sfx,frxrange,em,nchtocheck,none1sqrt2log3);
+[M,Mrefave,Mbpdist,frx]=bpspectra_EachVsAll_2025(d,sfx,frxrange,em,nchtocheck,none1sqrt2log3);
 
 %% mean across windows
 
@@ -205,21 +205,18 @@ end
 %         the bin containing the referential channels
 
 
-
-
-
 %% unstack and line up into 3D matrix to create channels^2 X frequencies x trials for easier indexing-->binning
 % NOTE: the transform (based on none1sqrt2log3) is performed INSIDE this
-[mz_zSpeech,mzSpeech,mflatSpeech,bpdistSpeech ] =               bin_zscore_trial(mSpeech,        nchtocheck,            Mbpdist,   binsz,frx,none1sqrt2log3);
-[mz_zStim,mzStim,mflatStim,bpdistStim ] =                       bin_zscore_trial(mStim,          nchtocheck,            Mbpdist,   binsz,frx,none1sqrt2log3);
+[mz_zSpeech,mzSpeech,mflatSpeech,bpdistSpeech ] =               bin_zscore_trial(mSpeech,nchtocheck,Mbpdist,binsz,frx,none1sqrt2log3);
+[mz_zStim,mzStim,mflatStim,bpdistStim ] =                       bin_zscore_trial(mStim,nchtocheck,Mbpdist,binsz,frx,none1sqrt2log3);
 [mz_zNoST,mzNoST,mflatNoST,bpdistNoST ] =                       bin_zscore_trial(mNoSpeechNoStim,nchtocheck,            Mbpdist,   binsz,frx,none1sqrt2log3);
 
-[mz_zSpeechSTG,mzSpeechSTG,mflatSpeechSTG,bpdistSpeechSTG ] =   bin_zscore_trial(mSpeechSTG,        length(chansIntSTG),MbpdistSTG,binsz,frx,none1sqrt2log3);
-[mz_zStimSTG,mzStimSTG,mflatStimSTG,bpdistStimSTG ] =           bin_zscore_trial(mStimSTG,          length(chansIntSTG),MbpdistSTG,binsz,frx,none1sqrt2log3);
+[mz_zSpeechSTG,mzSpeechSTG,mflatSpeechSTG,bpdistSpeechSTG ] =   bin_zscore_trial(mSpeechSTG,length(chansIntSTG),MbpdistSTG,binsz,frx,none1sqrt2log3);
+[mz_zStimSTG,mzStimSTG,mflatStimSTG,bpdistStimSTG ] =           bin_zscore_trial(mStimSTG,length(chansIntSTG),MbpdistSTG,binsz,frx,none1sqrt2log3);
 [mz_zNoSTSTG,mzNoSTSTG,mflatNoSTSTG,bpdistNoSTSTG ] =           bin_zscore_trial(mNoSpeechNoStimSTG,length(chansIntSTG),MbpdistSTG,binsz,frx,none1sqrt2log3);
 
-[mz_zSpeechIFG,mzSpeechIFG,mflatSpeechIFG,bpdistSpeechIFG ] =   bin_zscore_trial(mSpeechIFG,        length(chansIntIFG),MbpdistIFG,binsz,frx,none1sqrt2log3);
-[mz_zStimIFG,mzStimIFG,mflatStimIFG,bpdistStimIFG ] =           bin_zscore_trial(mStimIFG,          length(chansIntIFG),MbpdistIFG,binsz,frx,none1sqrt2log3);
+[mz_zSpeechIFG,mzSpeechIFG,mflatSpeechIFG,bpdistSpeechIFG ] =   bin_zscore_trial(mSpeechIFG,length(chansIntIFG),MbpdistIFG,binsz,frx,none1sqrt2log3);
+[mz_zStimIFG,mzStimIFG,mflatStimIFG,bpdistStimIFG ] =           bin_zscore_trial(mStimIFG,length(chansIntIFG),MbpdistIFG,binsz,frx,none1sqrt2log3);
 [mz_zNoSTIFG,mzNoSTIFG,mflatNoSTIFG,bpdistNoSTIFG ] =           bin_zscore_trial(mNoSpeechNoStimIFG,length(chansIntIFG),MbpdistIFG,binsz,frx,none1sqrt2log3);
 
 %%
