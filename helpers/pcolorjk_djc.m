@@ -11,6 +11,6 @@ z=[z  nan(size(z,1),1)];
 z=[z; nan(1,size(z,2))];
 
 
-pcolor(x,y,z); shf
+pcolor(x,y,z);
 
 
