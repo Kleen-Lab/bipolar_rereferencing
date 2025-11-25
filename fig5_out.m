@@ -111,6 +111,8 @@ set(gca, 'GridAlpha', 0.35)
 %subplot6 = subplot('Position', [0.01, 0.255, 0.159, 0.1739]);
 %img2 = imread('/home/devkrish/Desktop/ec175.png');
 %imshow(img2);
+clear;
+
 
 subplot6 = subplot('Position', [0.03, 0.185, 0.315, 0.395]);
 pt = 'EC175';
@@ -118,7 +120,6 @@ pt = 'EC175';
 stg=getregionelecs(pt, 'stg');
 % elecsbrain(pt,0,[stg],[1 1 0], 0, 0, 4.5, 2);
 
-clear;
 
 data_dir = getenv("BIPOLAR_DATA");
 xlim_all = [0 40];
