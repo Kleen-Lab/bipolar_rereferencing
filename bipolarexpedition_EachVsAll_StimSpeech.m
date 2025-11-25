@@ -153,10 +153,6 @@ d=d(:,:,windowstocheck); clear Straces_allch; %free up RAM by getting rid of wha
 
 M=sq(mean(M,4));
 
-%can save files for plotting later in the fig5_out file
-save(fullfile(folderFigures,['/stg_Devon_' pt(3:end) '.mat']), 'dSpeech', 'dNoSpeechNoStim', 'dStim','mSpeech', 'mNoSpeechNoStim', 'mStim', 'Mbpdist', 'frx', '-v7.3');
-
-
 %% now that we have bipolar pairs and spectra, we can select the channels we are interested in
 
 % which channnels are we interseted in
@@ -783,6 +779,14 @@ if savePlots
     exportgraphics(tempFig,fullfile(folderFigures,pt,[pt '_gamma.png']),'Resolution',600)
     exportgraphics(tempFig,fullfile(folderFigures,pt,[pt '_gamma.eps']))
 end
+
+%can save files for plotting later in the fig5_out file
+save(fullfile(folderFigures,['/stg_Devon_' pt(3:end) '.mat']),'avgStimBaseSTG','maxSTGAbs', ...
+    'dSpeech','mz_zSpeechSTG','mz_zNoSTSTG','dNoSpeechNoStim', 'dStim','mSpeech', 'mNoSpeechNoStim',...
+    'avgStimBaseClustSTG','mz_zStimSTG_gamma','mz_zNoSTSTG_gamma','clustersSpeechSTG_gamma','pValuesSpeechSTG_gamma', ...
+    'binzplotSTG','MbpdistSTG'...
+    'mStim', 'Mbpdist', 'frx', '-v7.3');
+
 
 %%
 % figure('color','w','position',[277 223 1095 963]); colormap(parula);
