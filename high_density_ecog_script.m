@@ -8,13 +8,14 @@ makeEqualTrials = false;
 doPerm = true;
 doInd = true;
 plotPermChans = true;
-savePlots = true;
+savePlots = false;
+doPlots = false;
 
 % some algorithm = plotting choices, defaults are for raw spikes, for line length
 % algorthim the choices are further below
 colormapChoice = 'PRgn';
 desiredPlotBounds = [-1000 1000];
-twoSidedPerm = true;
+twoSidedPerm = true; % FOR LL AND ABSDER BECOMES ONE-SIDED
 
 fs = 512; % sampling rate Hz
 
@@ -52,32 +53,34 @@ saveName = {'LL20','LL40','LL100','absDer'};
 
 for index = 1:length(folderFiguresCell)
 
-    % visualize spikes to start
-    figureMeanSpikes = figure;
-    figureMeanReref = figure;
-    figureMeanRerefSubSample = figure;
+    if doPlots
+        % visualize spikes to start
+        figureMeanSpikes = figure;
+        figureMeanReref = figure;
+        figureMeanRerefSubSample = figure;
 
-    figureBaselineMean = figure;
-    figureBaselineMeanReref = figure;
-    figureBaselineMeanRerefSubSample = figure;
+        figureBaselineMean = figure;
+        figureBaselineMeanReref = figure;
+        figureBaselineMeanRerefSubSample = figure;
 
-    figureStdSpikes = figure;
-    figureStdReref = figure;
-    figureStdRerefSubSample = figure;
+        figureStdSpikes = figure;
+        figureStdReref = figure;
+        figureStdRerefSubSample = figure;
 
-    figureBaselineStd = figure;
-    figureBaselineStdReref = figure;
-    figureBaselineStdRerefSubSample = figure;
+        figureBaselineStd = figure;
+        figureBaselineStdReref = figure;
+        figureBaselineStdRerefSubSample = figure;
 
-    figureTotal = figure;
-    tiledlayout(5,5,'TileSpacing','Compact','Padding','Compact');
-    hold on;
-    figureTotal.Position =  [839 109 1408 1229];
+        figureTotal = figure;
+        tiledlayout(5,5,'TileSpacing','Compact','Padding','Compact');
+        hold on;
+        figureTotal.Position =  [839 109 1408 1229];
 
-    figureTotalSub = figure;
-    tiledlayout(5,5,'TileSpacing','Compact','Padding','Compact');
-    hold on;
-    figureTotalSub.Position =  [839 109 1408 1229];
+        figureTotalSub = figure;
+        tiledlayout(5,5,'TileSpacing','Compact','Padding','Compact');
+        hold on;
+        figureTotalSub.Position =  [839 109 1408 1229];
+    end
 
     permResultsCell = {};
     maxCluster = {};
@@ -274,165 +277,167 @@ for index = 1:length(folderFiguresCell)
 
         disp('Data Processed')
 
-        %% plotting
-        % mean rereferenced data
-        figure(figureMeanSpikes)
-        subplot(5,5,jj)
-        imagesc(meanSpikesGoodOnly(1:end-1,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        % caxis([-max(abs(meanSpikesGoodOnly(:))) max(abs(meanSpikesGoodOnly(:)))])
-        caxis(desiredPlotBounds)
-        colormap(brewermap([],colormapChoice))
-
-        figure(figureMeanRerefSubSample)
-        subplot(5,5,jj)
-        imagesc(meanSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        %  caxis([-max(abs(meanSpikesReferencedSubSampleGoodOnly(:))) max(abs(meanSpikesReferencedSubSampleGoodOnly(:)))])
-        caxis(desiredPlotBounds)
-        colormap(brewermap([],colormapChoice))
-
-        figure(figureMeanReref)
-        subplot(5,5,jj)
-        imagesc(meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        %caxis([-max(abs(meanSpikesReferencedGoodOnly(:))) max(abs(meanSpikesReferencedGoodOnly(:)))])
-        caxis(desiredPlotBounds)
-        colormap(brewermap([],colormapChoice))
-
-        % mean baseline data
-        figure(figureBaselineMean)
-        subplot(5,5,jj)
-        imagesc(meanBaselineGoodOnly(:,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        %caxis([-max(abs(meanBaselineGoodOnly(:))) max(abs(meanBaselineGoodOnly(:)))])
-        caxis(desiredPlotBounds)
-        colormap(brewermap([],colormapChoice))
-
-        figure(figureBaselineMeanRerefSubSample)
-        subplot(5,5,jj)
-        imagesc(meanSpikesReferencedBaselineSubSampleGoodOnly(:,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        %caxis([-max(abs(meanSpikesReferencedBaselineSubSampleGoodOnly(:))) max(abs(meanSpikesReferencedBaselineSubSampleGoodOnly(:)))])
-        caxis(desiredPlotBounds)
-        colormap(brewermap([],colormapChoice))
-
-        figure(figureBaselineMeanReref)
-        subplot(5,5,jj)
-        imagesc(meanSpikesReferencedBaselineGoodOnly(:,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        %caxis([-max(abs(meanSpikesReferencedBaselineGoodOnly(:))) max(abs(meanSpikesReferencedBaselineGoodOnly(:)))])
-        caxis(desiredPlotBounds)
-        colormap(brewermap([],colormapChoice))
-
-        % std rereferenced data
-        figure(figureStdSpikes)
-        subplot(5,5,jj)
-        imagesc(stdSpikesGoodOnly(1:end-1,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        % caxis([-max(abs(stdSpikesGoodOnly(:))) max(abs(stdSpikesGoodOnly(:)))])
-        caxis([-2000 2000])
-        colormap(brewermap([],colormapChoice))
-
-        figure(figureStdRerefSubSample)
-        subplot(5,5,jj)
-        imagesc(stdSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-
-        title(['Subject ' subjName])
-        %caxis([-max(abs(stdSpikesReferencedSubSampleGoodOnly(:))) max(abs(stdSpikesReferencedSubSampleGoodOnly(:)))])
-        caxis([-2000 2000])
-        colormap(brewermap([],colormapChoice))
-
-        figure(figureStdReref)
-        subplot(5,5,jj)
-        imagesc(stdSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        % caxis([-max(abs(stdSpikesReferencedGoodOnly(:))) max(abs(stdSpikesReferencedGoodOnly(:)))])
-        caxis([-2000 2000])
-        colormap(brewermap([],colormapChoice))
-
-        % std baseline data
-        figure(figureBaselineStd)
-        subplot(5,5,jj)
-        imagesc(stdBaselineGoodOnly(:,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        caxis([-max(abs(stdBaselineGoodOnly(:))) max(abs(stdBaselineGoodOnly(:)))])
-        caxis([-2000 2000])
-        colormap(brewermap([],colormapChoice))
-
-        figure(figureBaselineStdRerefSubSample)
-        subplot(5,5,jj)
-        imagesc(stdSpikesReferencedBaselineSubSampleGoodOnly(:,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        caxis([-max(abs(stdSpikesReferencedBaselineSubSampleGoodOnly(:))) max(abs(stdSpikesReferencedBaselineSubSampleGoodOnly(:)))])
-        caxis([-2000 2000])
-        colormap(brewermap([],colormapChoice))
-
-        figure(figureBaselineStdReref)
-        subplot(5,5,jj)
-        imagesc(stdSpikesReferencedBaselineGoodOnly(:,notNanIndsCombined)')
-        xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-        xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
-        set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-        title(['Subject ' subjName])
-        %  caxis([-max(abs(stdSpikesReferencedBaselineGoodOnly(:))) max(abs(stdSpikesReferencedBaselineGoodOnly(:)))])
-        caxis([-2000 2000])
-        colormap(brewermap([],colormapChoice))
-
-        if doPlotIndSubj
-            figure
-            imagesc(meanSpikesReferencedSubSampleGoodOnly(:,notNanIndsCombined)')
+        if doPlots
+            %% plotting
+            % mean rereferenced data
+            figure(figureMeanSpikes)
+            subplot(5,5,jj)
+            imagesc(meanSpikesGoodOnly(1:end-1,notNanIndsCombined)')
             xt = get(gca, 'XTick');                                             % Original 'XTick' Values
             xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
             set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-            xlabel('Time (s)')
-            ylabel('Channel')
-            title([patientsVetted{jj} ' Average spikes - 8 mm rereference'])
+            title(['Subject ' subjName])
+            % caxis([-max(abs(meanSpikesGoodOnly(:))) max(abs(meanSpikesGoodOnly(:)))])
+            caxis(desiredPlotBounds)
             colormap(brewermap([],colormapChoice))
 
-            figure
-            imagesc(meanSpikesReferencedGoodOnly(:,notNanIndsCombined)')
+            figure(figureMeanRerefSubSample)
+            subplot(5,5,jj)
+            imagesc(meanSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
             xt = get(gca, 'XTick');                                             % Original 'XTick' Values
             xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
             set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-            xlabel('Time (s)')
-            ylabel('Channel')
-            title([patientsVetted{jj} ' Average spikes - 4 mm rereference'])
+            title(['Subject ' subjName])
+            %  caxis([-max(abs(meanSpikesReferencedSubSampleGoodOnly(:))) max(abs(meanSpikesReferencedSubSampleGoodOnly(:)))])
+            caxis(desiredPlotBounds)
             colormap(brewermap([],colormapChoice))
 
+            figure(figureMeanReref)
+            subplot(5,5,jj)
+            imagesc(meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+            title(['Subject ' subjName])
+            %caxis([-max(abs(meanSpikesReferencedGoodOnly(:))) max(abs(meanSpikesReferencedGoodOnly(:)))])
+            caxis(desiredPlotBounds)
+            colormap(brewermap([],colormapChoice))
+
+            % mean baseline data
+            figure(figureBaselineMean)
+            subplot(5,5,jj)
+            imagesc(meanBaselineGoodOnly(:,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+            title(['Subject ' subjName])
+            %caxis([-max(abs(meanBaselineGoodOnly(:))) max(abs(meanBaselineGoodOnly(:)))])
+            caxis(desiredPlotBounds)
+            colormap(brewermap([],colormapChoice))
+
+            figure(figureBaselineMeanRerefSubSample)
+            subplot(5,5,jj)
+            imagesc(meanSpikesReferencedBaselineSubSampleGoodOnly(:,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+            title(['Subject ' subjName])
+            %caxis([-max(abs(meanSpikesReferencedBaselineSubSampleGoodOnly(:))) max(abs(meanSpikesReferencedBaselineSubSampleGoodOnly(:)))])
+            caxis(desiredPlotBounds)
+            colormap(brewermap([],colormapChoice))
+
+            figure(figureBaselineMeanReref)
+            subplot(5,5,jj)
+            imagesc(meanSpikesReferencedBaselineGoodOnly(:,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+            title(['Subject ' subjName])
+            %caxis([-max(abs(meanSpikesReferencedBaselineGoodOnly(:))) max(abs(meanSpikesReferencedBaselineGoodOnly(:)))])
+            caxis(desiredPlotBounds)
+            colormap(brewermap([],colormapChoice))
+
+            % std rereferenced data
+            figure(figureStdSpikes)
+            subplot(5,5,jj)
+            imagesc(stdSpikesGoodOnly(1:end-1,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+            title(['Subject ' subjName])
+            % caxis([-max(abs(stdSpikesGoodOnly(:))) max(abs(stdSpikesGoodOnly(:)))])
+            caxis([-2000 2000])
+            colormap(brewermap([],colormapChoice))
+
+            figure(figureStdRerefSubSample)
+            subplot(5,5,jj)
+            imagesc(stdSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+
+            title(['Subject ' subjName])
+            %caxis([-max(abs(stdSpikesReferencedSubSampleGoodOnly(:))) max(abs(stdSpikesReferencedSubSampleGoodOnly(:)))])
+            caxis([-2000 2000])
+            colormap(brewermap([],colormapChoice))
+
+            figure(figureStdReref)
+            subplot(5,5,jj)
+            imagesc(stdSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+            title(['Subject ' subjName])
+            % caxis([-max(abs(stdSpikesReferencedGoodOnly(:))) max(abs(stdSpikesReferencedGoodOnly(:)))])
+            caxis([-2000 2000])
+            colormap(brewermap([],colormapChoice))
+
+            % std baseline data
+            figure(figureBaselineStd)
+            subplot(5,5,jj)
+            imagesc(stdBaselineGoodOnly(:,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+            title(['Subject ' subjName])
+            caxis([-max(abs(stdBaselineGoodOnly(:))) max(abs(stdBaselineGoodOnly(:)))])
+            caxis([-2000 2000])
+            colormap(brewermap([],colormapChoice))
+
+            figure(figureBaselineStdRerefSubSample)
+            subplot(5,5,jj)
+            imagesc(stdSpikesReferencedBaselineSubSampleGoodOnly(:,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+            title(['Subject ' subjName])
+            caxis([-max(abs(stdSpikesReferencedBaselineSubSampleGoodOnly(:))) max(abs(stdSpikesReferencedBaselineSubSampleGoodOnly(:)))])
+            caxis([-2000 2000])
+            colormap(brewermap([],colormapChoice))
+
+            figure(figureBaselineStdReref)
+            subplot(5,5,jj)
+            imagesc(stdSpikesReferencedBaselineGoodOnly(:,notNanIndsCombined)')
+            xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+            xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+            set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+            title(['Subject ' subjName])
+            %  caxis([-max(abs(stdSpikesReferencedBaselineGoodOnly(:))) max(abs(stdSpikesReferencedBaselineGoodOnly(:)))])
+            caxis([-2000 2000])
+            colormap(brewermap([],colormapChoice))
+
+            if doPlotIndSubj
+                figure
+                imagesc(meanSpikesReferencedSubSampleGoodOnly(:,notNanIndsCombined)')
+                xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+                xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+                set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+                xlabel('Time (s)')
+                ylabel('Channel')
+                title([patientsVetted{jj} ' Average spikes - 8 mm rereference'])
+                colormap(brewermap([],colormapChoice))
+
+                figure
+                imagesc(meanSpikesReferencedGoodOnly(:,notNanIndsCombined)')
+                xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+                xtlbl = linspace(-0.5,0.5, numel(xt));                     % New 'XTickLabel' Vector
+                set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+                xlabel('Time (s)')
+                ylabel('Channel')
+                title([patientsVetted{jj} ' Average spikes - 4 mm rereference'])
+                colormap(brewermap([],colormapChoice))
+
+            end
         end
         %% permutation testing
         if doPerm
@@ -562,338 +567,252 @@ for index = 1:length(folderFiguresCell)
                 figure(figureTotalSub)
                 nexttile
                 title(patientsVetted{jj})
+                if doPlots
+                    if plotPermChans & ~isempty(dataIntTemp) & sum(~isnan(dataIntTemp(:)))
 
-                if plotPermChans & ~isempty(dataIntTemp) & sum(~isnan(dataIntTemp(:)))
+                        desiredPlotBoundsSubj = [0 max(dataIntTemp(:))];
 
-                    desiredPlotBoundsSubj = [0 max(dataIntTemp(:))];
+                        numPlotVec = length(notNanIndsCombined);
+                        tPlot = t(1:end-1);
 
-                    numPlotVec = length(notNanIndsCombined);
-                    tPlot = t(1:end-1);
-
-                    figure
-                    imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-                    %                xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-                    %                xtnew = linspace(min(xt), max(xt), 5);                              % New 'XTick' Values
-                    %                xtlbl = linspace(-0.5, 0.5, numel(xtnew));                  % New 'XTickLabel' Vector
-                    %                set(gca, 'XTick',xtnew, 'XTickLabel',xtlbl)                         % Label Ticks
-                    xlabel('Time (s)')
-                    ylabel('Channel')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodInd = 1:length(notNanIndsCombined)
-                        goodChan = notNanIndsCombined(chanGoodInd);
-                        if ~isempty(permResultsCell{jj}.clusters{goodChan})
-                            if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & ( permResultsCell{jj}.adjpValuesTotal{goodChan}(1)<0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))- tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        figure
+                        imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
+                        %                xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+                        %                xtnew = linspace(min(xt), max(xt), 5);                              % New 'XTick' Values
+                        %                xtlbl = linspace(-0.5, 0.5, numel(xtnew));                  % New 'XTickLabel' Vector
+                        %                set(gca, 'XTick',xtnew, 'XTickLabel',xtlbl)                         % Label Ticks
+                        xlabel('Time (s)')
+                        ylabel('Channel')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodInd = 1:length(notNanIndsCombined)
+                            goodChan = notNanIndsCombined(chanGoodInd);
+                            if ~isempty(permResultsCell{jj}.clusters{goodChan})
+                                if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & ( permResultsCell{jj}.adjpValuesTotal{goodChan}(1)<0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))- tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
-                    end
-                    currentFig = gcf;
-                    currentFig.Position = [839 109 1408 1229];
-                    title(['Subject ' subjName ' Average spikes - 4mm rereference - FDR'])
-                    set(gca,'FontSize',20)
-                    if savePlots
-                        exportgraphics(currentFig,fullfile(folderFigures,['fdr_' subjName '_perm.png']),'Resolution',600)
-                        exportgraphics(currentFig,fullfile(folderFigures,['fdr_' subjName '_perm.eps']))
-                    end
+                        currentFig = gcf;
+                        currentFig.Position = [839 109 1408 1229];
+                        title(['Subject ' subjName ' Average spikes - 4mm rereference - FDR'])
+                        set(gca,'FontSize',20)
+                        if savePlots
+                            exportgraphics(currentFig,fullfile(folderFigures,['fdr_' subjName '_perm.png']),'Resolution',600)
+                            exportgraphics(currentFig,fullfile(folderFigures,['fdr_' subjName '_perm.eps']))
+                        end
 
 
-                    figure(figureTotal)
-                    hold on
-                    imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodInd = 1:length(notNanIndsCombined)
-                        goodChan = notNanIndsCombined(chanGoodInd);
-                        if ~isempty(permResultsCell{jj}.clusters{goodChan})
-                            if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & ( permResultsCell{jj}.adjpValuesTotal{goodChan}(1)<0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))- tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        figure(figureTotal)
+                        hold on
+                        imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodInd = 1:length(notNanIndsCombined)
+                            goodChan = notNanIndsCombined(chanGoodInd);
+                            if ~isempty(permResultsCell{jj}.clusters{goodChan})
+                                if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & ( permResultsCell{jj}.adjpValuesTotal{goodChan}(1)<0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))- tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
-                    end
-                    title(patientsVetted{jj});
+                        title(patientsVetted{jj});
 
 
-                    figure
-                    imagesc([-0.5 0.5],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-                    %   xticks([-0.5 -0.25 0 0.25 0.5])
-                    %   xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-                    %  xtlbl = linspace(-0.5,0.5, numel(xt)-1);                     % New 'XTickLabel' Vector
-                    % set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-                    xlabel('Time (s)')
-                    ylabel('Channel')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodInd = 1:length(notNanIndsCombined)
-                        goodChan = notNanIndsCombined(chanGoodInd);
-                        if ~isempty(permResultsCell{jj}.clusters{goodChan})
-                            if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & (permResultsCell{jj}.pValues{goodChan}(1) <0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))-tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        figure
+                        imagesc([-0.5 0.5],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
+                        %   xticks([-0.5 -0.25 0 0.25 0.5])
+                        %   xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+                        %  xtlbl = linspace(-0.5,0.5, numel(xt)-1);                     % New 'XTickLabel' Vector
+                        % set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+                        xlabel('Time (s)')
+                        ylabel('Channel')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodInd = 1:length(notNanIndsCombined)
+                            goodChan = notNanIndsCombined(chanGoodInd);
+                            if ~isempty(permResultsCell{jj}.clusters{goodChan})
+                                if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & (permResultsCell{jj}.pValues{goodChan}(1) <0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))-tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
-                    end
-                    currentFig = gcf;
-                    currentFig.Position = [839 109 1408 1229];
-                    title(['Subject ' subjName  ' Average spikes - 4 mm rereference'])
-                    set(gca,'FontSize',20)
+                        currentFig = gcf;
+                        currentFig.Position = [839 109 1408 1229];
+                        title(['Subject ' subjName  ' Average spikes - 4 mm rereference'])
+                        set(gca,'FontSize',20)
 
-                    if savePlots
-                        exportgraphics(currentFig,fullfile(folderFigures,[subjName '_perm.png']),'Resolution',600)
-                        exportgraphics(currentFig,fullfile(folderFigures,[subjName '_perm.eps']))
-                    end
+                        if savePlots
+                            exportgraphics(currentFig,fullfile(folderFigures,[subjName '_perm.png']),'Resolution',600)
+                            exportgraphics(currentFig,fullfile(folderFigures,[subjName '_perm.eps']))
+                        end
 
 
-                    figure
-                    imagesc([-0.5 0.5],[1,numPlotVec],meanSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
-                    %  xticks([-0.5 -0.25 0 0.25 0.5])
-                    %   xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-                    %  xtlbl = linspace(-0.5,0.5, numel(xt)-1);                     % New 'XTickLabel' Vector
-                    % set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-                    xlabel('Time (s)')
-                    ylabel('Channel')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodIndSub = 1:length(notNanIndsCombined)
-                        goodChanSub = notNanIndsCombined(chanGoodIndSub);
-                        if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
-                            if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.adjpValuesTotalSub{goodChanSub}(1)<0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        figure
+                        imagesc([-0.5 0.5],[1,numPlotVec],meanSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
+                        %  xticks([-0.5 -0.25 0 0.25 0.5])
+                        %   xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+                        %  xtlbl = linspace(-0.5,0.5, numel(xt)-1);                     % New 'XTickLabel' Vector
+                        % set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+                        xlabel('Time (s)')
+                        ylabel('Channel')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodIndSub = 1:length(notNanIndsCombined)
+                            goodChanSub = notNanIndsCombined(chanGoodIndSub);
+                            if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
+                                if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.adjpValuesTotalSub{goodChanSub}(1)<0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
-                    end
 
-                    currentFig = gcf;
-                    currentFig.Position = [839 109 1408 1229];
+                        currentFig = gcf;
+                        currentFig.Position = [839 109 1408 1229];
 
-                    title(['Subject ' subjName ' Average spikes - 8 mm rereference - FDR'])
-                    set(gca,'FontSize',20)
+                        title(['Subject ' subjName ' Average spikes - 8 mm rereference - FDR'])
+                        set(gca,'FontSize',20)
 
-                    if savePlots
-                        exportgraphics(currentFig,fullfile(folderFigures,['fdr_subsample' subjName '_perm.png']),'Resolution',600)
-                        exportgraphics(currentFig,fullfile(folderFigures,['fdr_subsample' subjName '_perm.eps']))
-                    end
+                        if savePlots
+                            exportgraphics(currentFig,fullfile(folderFigures,['fdr_subsample' subjName '_perm.png']),'Resolution',600)
+                            exportgraphics(currentFig,fullfile(folderFigures,['fdr_subsample' subjName '_perm.eps']))
+                        end
 
 
-                    figure(figureTotalSub)
-                    imagesc([-0.5 0.5],[1,numPlotVec],meanSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodIndSub = 1:length(notNanIndsCombined)
-                        goodChanSub = notNanIndsCombined(chanGoodIndSub);
-                        if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
-                            if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.adjpValuesTotalSub{goodChanSub}(1)<0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        figure(figureTotalSub)
+                        imagesc([-0.5 0.5],[1,numPlotVec],meanSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodIndSub = 1:length(notNanIndsCombined)
+                            goodChanSub = notNanIndsCombined(chanGoodIndSub);
+                            if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
+                                if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.adjpValuesTotalSub{goodChanSub}(1)<0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
-                    end
-                    title(patientsVetted{jj});
+                        title(patientsVetted{jj});
 
-                    figure
-                    imagesc([-0.5 0.5],[1,numPlotVec],meanSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
-                    %  xticks([-0.5 -0.25 0 0.25 0.5])
-                    %   xt = get(gca, 'XTick');                                             % Original 'XTick' Values
-                    %  xtlbl = linspace(-0.5,0.5, numel(xt)-1);                     % New 'XTickLabel' Vector
-                    % set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
-                    xlabel('Time (s)')
-                    ylabel('Channel')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodIndSub = 1:length(notNanIndsCombined)
-                        goodChanSub = notNanIndsCombined(chanGoodIndSub);
-                        if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
-                            if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.pValuesSub{goodChanSub}(1) < 0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        figure
+                        imagesc([-0.5 0.5],[1,numPlotVec],meanSpikesReferencedSubSampleGoodOnly(1:end-1,notNanIndsCombined)')
+                        %  xticks([-0.5 -0.25 0 0.25 0.5])
+                        %   xt = get(gca, 'XTick');                                             % Original 'XTick' Values
+                        %  xtlbl = linspace(-0.5,0.5, numel(xt)-1);                     % New 'XTickLabel' Vector
+                        % set(gca, 'XTick',xt, 'XTickLabel',xtlbl)   % Label Ticks
+                        xlabel('Time (s)')
+                        ylabel('Channel')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodIndSub = 1:length(notNanIndsCombined)
+                            goodChanSub = notNanIndsCombined(chanGoodIndSub);
+                            if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
+                                if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.pValuesSub{goodChanSub}(1) < 0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
-                    end
 
-                    currentFig = gcf;
-                    currentFig.Position = [839 109 1408 1229];
-                    title(['Subject ' subjName  ' Average spikes - 8 mm rereference'])
-                    set(gca,'FontSize',20)
+                        currentFig = gcf;
+                        currentFig.Position = [839 109 1408 1229];
+                        title(['Subject ' subjName  ' Average spikes - 8 mm rereference'])
+                        set(gca,'FontSize',20)
 
-                    if savePlots
-                        exportgraphics(currentFig,fullfile(folderFigures,['subsample_' subjName '_perm.png']),'Resolution',600)
-                        exportgraphics(currentFig,fullfile(folderFigures,['subsample_' subjName '_perm.eps']))
-                    end
+                        if savePlots
+                            exportgraphics(currentFig,fullfile(folderFigures,['subsample_' subjName '_perm.png']),'Resolution',600)
+                            exportgraphics(currentFig,fullfile(folderFigures,['subsample_' subjName '_perm.eps']))
+                        end
 
-                    %% OUTPUT FIGURE
+                        %% OUTPUT FIGURE
 
-                    figure2x2 = figure;
-                    tiledlayout(2,2,'TileSpacing','Compact','Padding','Compact');
-                    figure(figure2x2)
-                    figure2x2.Position = [839 109 1408 1229];
+                        figure2x2 = figure;
+                        tiledlayout(2,2,'TileSpacing','Compact','Padding','Compact');
+                        figure(figure2x2)
+                        figure2x2.Position = [839 109 1408 1229];
 
-                    nexttile
-                    imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodInd = 1:length(notNanIndsCombined)
-                        goodChan = notNanIndsCombined(chanGoodInd);
-                        if ~isempty(permResultsCell{jj}.clusters{goodChan})
-                            if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & (permResultsCell{jj}.pValues{goodChan}(1) <0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))-tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        nexttile
+                        imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodInd = 1:length(notNanIndsCombined)
+                            goodChan = notNanIndsCombined(chanGoodInd);
+                            if ~isempty(permResultsCell{jj}.clusters{goodChan})
+                                if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & (permResultsCell{jj}.pValues{goodChan}(1) <0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))-tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
-                    end
-                    title(['Subject ' subjName ' Average IED'])
-                    set(gca,'FontSize',14)
+                        title(['Subject ' subjName ' Average IED'])
+                        set(gca,'FontSize',14)
 
 
-                    figure(figure2x2)
-                    nexttile
-                    imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodInd = 1:length(notNanIndsCombined)
-                        goodChan = notNanIndsCombined(chanGoodInd);
-                        if ~isempty(permResultsCell{jj}.clusters{goodChan})
-                            if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & ( permResultsCell{jj}.adjpValuesTotal{goodChan}(1)<0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))- tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        figure(figure2x2)
+                        nexttile
+                        imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodInd = 1:length(notNanIndsCombined)
+                            goodChan = notNanIndsCombined(chanGoodInd);
+                            if ~isempty(permResultsCell{jj}.clusters{goodChan})
+                                if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & ( permResultsCell{jj}.adjpValuesTotal{goodChan}(1)<0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))- tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
-                    end
-                    title(['Subject ' subjName ' Average IED - FDR'])
-                    set(gca,'FontSize',14)
+                        title(['Subject ' subjName ' Average IED - FDR'])
+                        set(gca,'FontSize',14)
 
 
-                    figure(figure2x2)
-                    nexttile
-                    imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodIndSub = 1:length(notNanIndsCombined)
-                        goodChanSub = notNanIndsCombined(chanGoodIndSub);
-                        if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
-                            if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.pValuesSub{goodChanSub}(1) < 0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        figure(figure2x2)
+                        nexttile
+                        imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodIndSub = 1:length(notNanIndsCombined)
+                            goodChanSub = notNanIndsCombined(chanGoodIndSub);
+                            if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
+                                if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.pValuesSub{goodChanSub}(1) < 0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
-                    end
-                    title(['Subject ' subjName ' Average IED - subsampled'])
-                    set(gca,'FontSize',14)
+                        title(['Subject ' subjName ' Average IED - subsampled'])
+                        set(gca,'FontSize',14)
 
-                    figure(figure2x2)
-                    nexttile
-                    imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-                    colormap(brewermap([],colormapChoice))
-                    caxis(desiredPlotBoundsSubj)
-                    hold on
-                    for chanGoodIndSub = 1:length(notNanIndsCombined)
-                        goodChanSub = notNanIndsCombined(chanGoodIndSub);
-                        if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
-                            if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.adjpValuesTotalSub{goodChanSub}(1)<0.05))
-                                rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                        figure(figure2x2)
+                        nexttile
+                        imagesc([min(tPlot) max(tPlot)],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
+                        colormap(brewermap([],colormapChoice))
+                        caxis(desiredPlotBoundsSubj)
+                        hold on
+                        for chanGoodIndSub = 1:length(notNanIndsCombined)
+                            goodChanSub = notNanIndsCombined(chanGoodIndSub);
+                            if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
+                                if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.adjpValuesTotalSub{goodChanSub}(1)<0.05))
+                                    rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
+                                end
                             end
                         end
+                        xlabel('Time (s)')
+                        ylabel('Channel')
+                        title(['Subject ' subjName ' Average IED - subsampled - FDR'])
+                        set(gca,'FontSize',14)
+
+
+                        if savePlots
+                            exportgraphics(figure2x2,fullfile(folderFigures,[subjName '_2x2.png']),'Resolution',600)
+                            exportgraphics(figure2x2,fullfile(folderFigures,[subjName '_2x2.eps']))
+                        end
+
                     end
-                    xlabel('Time (s)')
-                    ylabel('Channel')
-                    title(['Subject ' subjName ' Average IED - subsampled - FDR'])
-                    set(gca,'FontSize',14)
-
-
-                    if savePlots
-                        exportgraphics(figure2x2,fullfile(folderFigures,[subjName '_2x2.png']),'Resolution',600)
-                        exportgraphics(figure2x2,fullfile(folderFigures,[subjName '_2x2.eps']))
-                    end
-
-                    % %% DEVON OUTPUT
-                    % 
-                    % figout = figure;
-                    % figure(figout)
-                    % tout = tiledlayout(2,3, 'TileSpacing', 'compact', 'Padding', 'compact');
-                    % figout.Position = [839 109 1408 1229];
-                    % 
-                    % keep = notNanIndsCombined;
-                    % %indices = keep(end-29:end);
-                    % indices = keep;
-                    % spike=107; %107, 275
-                    % bl=200;
-                    % 
-                    % figure(figout)
-                    % 
-                    % nexttile
-                    % mean_bl = referencedDataBaselineGoodOnly(:,indices, bl)';
-                    % eegplotbytime2021(mean_bl, 512, 500, [], 0, [0.5 0.5 0.5], 1);
-                    % title('Baseline - 4 mm BPRR')
-                    % set(gca, 'FontWeight', 'normal')
-                    % 
-                    % nexttile
-                    % mean_spike = referencedDataGoodOnly(:,indices,spike)';
-                    % eegplotbytime2021(mean_spike, 512, 500, [], 0, [0.5 0.5 0.5], 1);
-                    % ylabel('Channels')
-                    % title('IED - 4 mm BPRR')
-                    % set(gca, 'FontWeight', 'normal')
-                    % 
-                    % nexttile
-                    % 
-                    % imagesc([-0.51 0.51],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-                    % colormap(brewermap([],colormapChoice))
-                    % caxis(desiredPlotBoundsSubj)
-                    % hold on
-                    % for chanGoodInd = 1:length(notNanIndsCombined)
-                    %     goodChan = notNanIndsCombined(chanGoodInd);
-                    %     if ~isempty(permResultsCell{jj}.clusters{goodChan})
-                    %         if ((~isempty(permResultsCell{jj}.clusters{goodChan}{1})) & ( permResultsCell{jj}.adjpValuesTotal{goodChan}(1)<0.05))
-                    %             rectangle('position', [tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), chanGoodInd-0.5,tPlot(max(permResultsCell{jj}.clusters{goodChan}{1}))- tPlot(min(permResultsCell{jj}.clusters{goodChan}{1})), 1], 'edgecolor', 'k','linewidth',2)
-                    %         end
-                    %     end
-                    % end
-                    % xlabel('Time (s)')
-                    % ylabel('Channels')
-                    % title(['Pt. 5 High Density - Average IED, FDR'])
-                    % set(gca,'FontSize',10)
-                    % xticks([-0.50 -0.25 0 0.25 0.50])
-                    % 
-                    % %
-                    % 
-                    % figure(figout)
-                    % 
-                    % nexttile
-                    % mean_bl_sub = referencedDataBaselineSubSampleGoodOnly(1:512,indices, bl)';
-                    % eegplotbytime2021(mean_bl_sub, 512, 500, [], 0, [0.5 0.5 0.5], 1);
-                    % title('Baseline - 8 mm BPRR')
-                    % set(gca, 'FontWeight', 'normal')
-                    % set(gca, 'XTick', [10, 20, 30, 40, 50, 60])
-                    % 
-                    % 
-                    % nexttile
-                    % mean_spike_sub = referencedDataSubSampleGoodOnly(1:512,indices, spike)';
-                    % eegplotbytime2021(mean_spike_sub, 512, 500, [], 0, [0.5 0.5 0.5], 1);
-                    % title('IED - 8 mm BPRR')
-                    % set(gca, 'FontWeight', 'normal')
-                    % 
-                    % nexttile
-                    % imagesc([min(tPlot) max(tPlot)+0.012],[1,numPlotVec],meanSpikesReferencedGoodOnly(1:end-1,notNanIndsCombined)')
-                    % colormap(brewermap([],colormapChoice))
-                    % caxis(desiredPlotBoundsSubj)
-                    % hold on
-                    % for chanGoodIndSub = 1:length(notNanIndsCombined)
-                    %     goodChanSub = notNanIndsCombined(chanGoodIndSub);
-                    %     if ~isempty(permResultsCell{jj}.clustersSub{goodChanSub})
-                    %         if ((~isempty(permResultsCell{jj}.clustersSub{goodChanSub}{1})) & (permResultsCell{jj}.adjpValuesTotalSub{goodChanSub}(1)<0.05))
-                    %             rectangle('position', [tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), chanGoodIndSub-0.5,tPlot(max(permResultsCell{jj}.clustersSub{goodChanSub}{1}))-tPlot(min(permResultsCell{jj}.clustersSub{goodChanSub}{1})), 1], 'edgecolor', 'k','linewidth',2)
-                    %         end
-                    %     end
-                    % end
-                    % xlabel('Time (s)')
-                    % ylabel('Channels')
-                    % title(['Pt. 5 Subsampled - Average IED, FDR'])
-                    % set(gca,'FontSize',10)
-                    % xticks([-0.50 -0.25 0 0.25 0.50])
-
-
-
                 end
 
             end
@@ -901,159 +820,98 @@ for index = 1:length(folderFiguresCell)
 
         keep = notNanIndsCombined;
 
-    %    clearvars notNanInds notNanIndsCombined notNan notNanInds notNanSub notNanSubInds
+        %    clearvars notNanInds notNanIndsCombined notNan notNanInds notNanSub notNanSubInds
 
     end
+    if doPlots
+        %% captions on figures
 
-    %% captions on figures
+        %totalFigs
+        figure(figureTotal)
+        xlabel('Time (s)')
+        ylabel('Channel')
+        sgtitle('High-density average spikes with significant channels')
+        if savePlots
+            exportgraphics(figureMeanSpikes,fullfile(folderFigures,'total_spikes_significant.png'),'Resolution',600)
+            exportgraphics(figureMeanSpikes,fullfile(folderFigures,'total_spikes_significant.eps'))
+        end
 
-    %totalFigs
-    figure(figureTotal)
-    xlabel('Time (s)')
-    ylabel('Channel')
-    sgtitle('High-density average spikes with significant channels')
-    if savePlots
-        exportgraphics(figureMeanSpikes,fullfile(folderFigures,'total_spikes_significant.png'),'Resolution',600)
-        exportgraphics(figureMeanSpikes,fullfile(folderFigures,'total_spikes_significant.eps'))
+        figure(figureTotalSub)
+        xlabel('Time (s)')
+        ylabel('Channel')
+        sgtitle('Sub-sampled average spikes with significant channels')
+        if savePlots
+            exportgraphics(figureMeanSpikes,fullfile(folderFigures,'total_spikes_significant_sub.png'),'Resolution',600)
+            exportgraphics(figureMeanSpikes,fullfile(folderFigures,'total_spikes_significant_sub.eps'))
+        end
+
+        % mean spikes
+        figure(figureMeanSpikes)
+        xlabel('Time (s)')
+        ylabel('Channel')
+        sgtitle('Average spikes - no rereference')
+        figureMeanSpikes.Position = [839 109 1408 1229];
+
+        if savePlots
+            exportgraphics(figureMeanSpikes,fullfile(folderFigures,'mean_spikes.png'),'Resolution',600)
+            exportgraphics(figureMeanSpikes,fullfile(folderFigures,'mean_spikes.eps'))
+        end
+
+        figure(figureMeanRerefSubSample)
+        xlabel('Time (s)')
+        ylabel('Channel')
+        sgtitle('Average spikes - 8 mm  rereference')
+        figureMeanRerefSubSample.Position = [839 109 1408 1229];
+        if savePlots
+            exportgraphics(figureMeanRerefSubSample,fullfile(folderFigures,'mean_spikes_subsample_rereference.png'),'Resolution',600)
+            exportgraphics(figureMeanRerefSubSample,fullfile(folderFigures,'mean_spikes_subsample_rereference.eps'))
+        end
+
+        figure(figureMeanReref)
+        xlabel('Time (s)')
+        ylabel('Channel')
+        sgtitle('Average spikes - 4 mm rereference')
+        figureMeanReref.Position = [839 109 1408 1229];
+        if savePlots
+            exportgraphics(figureMeanReref,fullfile(folderFigures,'mean_spikes_rereference.png'),'Resolution',600)
+            exportgraphics(figureMeanReref,fullfile(folderFigures,'mean_spikes_rereference.eps'))
+        end
+
+        % mean baseline
+        figure(figureBaselineMean)
+        xlabel('Time (s)')
+        ylabel('Channel')
+        sgtitle('Average Baseline - no rereference')
+        figureBaselineMean.Position = [839 109 1408 1229];
+        if savePlots
+            exportgraphics(figureBaselineMean,fullfile(folderFigures,'mean_baseline.png'),'Resolution',600)
+            exportgraphics(figureBaselineMean,fullfile(folderFigures,'mean_baseline.eps'))
+        end
+
+        figure(figureBaselineMeanRerefSubSample)
+        xlabel('Time (s)')
+        ylabel('Channel')
+        sgtitle('Average Baseline - 8 mm  rereference')
+        figureBaselineMeanRerefSubSample.Position = [839 109 1408 1229];
+        if savePlots
+            exportgraphics(figureBaselineMeanRerefSubSample,fullfile(folderFigures,'mean_baseline_subsample.png'),'Resolution',600)
+            exportgraphics(figureBaselineMeanRerefSubSample,fullfile(folderFigures,'mean_baseline_subsample.eps'))
+        end
+
+        figure(figureBaselineMeanReref)
+        xlabel('Time (s)')
+        ylabel('Channel')
+        sgtitle('Average Baseline - 4 mm rereference')
+        figureBaselineMeanReref.Position = [839 109 1408 1229];
+        if savePlots
+            exportgraphics(figureBaselineMeanReref,fullfile(folderFigures,'mean_baseline_rereference.png'),'Resolution',600)
+            exportgraphics(figureBaselineMeanReref,fullfile(folderFigures,'mean_baseline_rereference.eps'))
+        end
     end
 
-    figure(figureTotalSub)
-    xlabel('Time (s)')
-    ylabel('Channel')
-    sgtitle('Sub-sampled average spikes with significant channels')
-    if savePlots
-        exportgraphics(figureMeanSpikes,fullfile(folderFigures,'total_spikes_significant_sub.png'),'Resolution',600)
-        exportgraphics(figureMeanSpikes,fullfile(folderFigures,'total_spikes_significant_sub.eps'))
-    end
+    save(fullfile(folderFigures,saveNameSpecific),'permResultsCell','referencedDataBaselineGoodOnly','referencedDataGoodOnly','referencedData','referencedDataBaseline','referencedDataSubSample','referencedDataBaselineSubSample','referencedDataBaselineSubSampleGoodOnly','patientsVetted','svmCell')
+    clearvars permResultsCell svmCell referencedDataBaselineGoodOnly referencedDataGoodOnly referencedData referencedDataBaseline referencedDataSubSample referencedDataBaselineSubSample referencedDataBaselineSubSampleGoodOnly
+    close all
 
-    % mean spikes
-    figure(figureMeanSpikes)
-    xlabel('Time (s)')
-    ylabel('Channel')
-    sgtitle('Average spikes - no rereference')
-    figureMeanSpikes.Position = [839 109 1408 1229];
-
-    if savePlots
-        exportgraphics(figureMeanSpikes,fullfile(folderFigures,'mean_spikes.png'),'Resolution',600)
-        exportgraphics(figureMeanSpikes,fullfile(folderFigures,'mean_spikes.eps'))
-    end
-
-    figure(figureMeanRerefSubSample)
-    xlabel('Time (s)')
-    ylabel('Channel')
-    sgtitle('Average spikes - 8 mm  rereference')
-    figureMeanRerefSubSample.Position = [839 109 1408 1229];
-    if savePlots
-        exportgraphics(figureMeanRerefSubSample,fullfile(folderFigures,'mean_spikes_subsample_rereference.png'),'Resolution',600)
-        exportgraphics(figureMeanRerefSubSample,fullfile(folderFigures,'mean_spikes_subsample_rereference.eps'))
-    end
-
-    figure(figureMeanReref)
-    xlabel('Time (s)')
-    ylabel('Channel')
-    sgtitle('Average spikes - 4 mm rereference')
-    figureMeanReref.Position = [839 109 1408 1229];
-    if savePlots
-        exportgraphics(figureMeanReref,fullfile(folderFigures,'mean_spikes_rereference.png'),'Resolution',600)
-        exportgraphics(figureMeanReref,fullfile(folderFigures,'mean_spikes_rereference.eps'))
-    end
-
-    % mean baseline
-    figure(figureBaselineMean)
-    xlabel('Time (s)')
-    ylabel('Channel')
-    sgtitle('Average Baseline - no rereference')
-    figureBaselineMean.Position = [839 109 1408 1229];
-    if savePlots
-        exportgraphics(figureBaselineMean,fullfile(folderFigures,'mean_baseline.png'),'Resolution',600)
-        exportgraphics(figureBaselineMean,fullfile(folderFigures,'mean_baseline.eps'))
-    end
-
-    figure(figureBaselineMeanRerefSubSample)
-    xlabel('Time (s)')
-    ylabel('Channel')
-    sgtitle('Average Baseline - 8 mm  rereference')
-    figureBaselineMeanRerefSubSample.Position = [839 109 1408 1229];
-    if savePlots
-        exportgraphics(figureBaselineMeanRerefSubSample,fullfile(folderFigures,'mean_baseline_subsample.png'),'Resolution',600)
-        exportgraphics(figureBaselineMeanRerefSubSample,fullfile(folderFigures,'mean_baseline_subsample.eps'))
-    end
-
-    figure(figureBaselineMeanReref)
-    xlabel('Time (s)')
-    ylabel('Channel')
-    sgtitle('Average Baseline - 4 mm rereference')
-    figureBaselineMeanReref.Position = [839 109 1408 1229];
-    if savePlots
-        exportgraphics(figureBaselineMeanReref,fullfile(folderFigures,'mean_baseline_rereference.png'),'Resolution',600)
-        exportgraphics(figureBaselineMeanReref,fullfile(folderFigures,'mean_baseline_rereference.eps'))
-    end
-
-     save(fullfile(folderFigures,saveNameSpecific),'permResultsCell','referencedDataBaselineGoodOnly','referencedDataGoodOnly','referencedData','referencedDataBaseline','referencedDataSubSample','referencedDataBaselineSubSample','referencedDataBaselineSubSampleGoodOnly','patientsVetted','svmCell')
-   clearvars permResultsCell svmCell referencedDataBaselineGoodOnly referencedDataGoodOnly referencedData referencedDataBaseline referencedDataSubSample referencedDataBaselineSubSample referencedDataBaselineSubSampleGoodOnly
-   close all
-    
 
 end
-
-% %% Devon Traces (Individual Traces)
-% 
-% figavg = figure;
-% t = tiledlayout(2,2,'TileSpacing','compact','Padding','compact');
-% figavg.Position = [839 109 1408 1229];
-% indices = keep(end-29:end);
-% ind_red = keep(end-6:end);
-% indices=keep;
-% 
-% nexttile
-% mean_spike = meanSpikesReferencedGoodOnly(1:512,indices)';
-% eegplotbytime2021(mean_spike, 512, 2700, [], 0, [0.3 0.3 0.3], 1);
-% 
-% nexttile
-% mean_bl = meanSpikesReferencedBaselineGoodOnly(1:512,indices)';
-% eegplotbytime2021(mean_bl, 512, 2700, [], 0, [0.3 0.3 0.3], 1);
-% 
-% nexttile
-% mean_spike_sub = meanSpikesReferencedSubSampleGoodOnly(1:512,indices)';
-% eegplotbytime2021(mean_spike_sub, 512, 2700, [], 0, [0.3 0.3 0.3], 1);
-% 
-% nexttile
-% mean_bl_sub = meanSpikesReferencedBaselineSubSampleGoodOnly(1:512,indices)';
-% eegplotbytime2021(mean_bl_sub, 512, 2700, [], 0, [0.3 0.3 0.3], 1);
-% 
-% %%
-% 
-% fig_ind = figure;
-% t2 = tiledlayout(2,2,'TileSpacing','compact','Padding','compact');
-% fig_ind.Position = [839 109 1408 1229];
-% indices = keep(end-29:end);
-% indices = keep;
-% spike=107; %107, 275
-% bl=200;
-% 
-% nexttile
-% mean_spike = referencedDataGoodOnly(1:512,indices,spike)';
-% eegplotbytime2021(mean_spike, 512, 200, [], 0, [0.3 0.3 0.3], 1);
-% ylabel('Channels')
-% title('IED - 4 mm BPRR')
-% set(gca, 'FontWeight', 'normal')
-% 
-% nexttile
-% mean_bl = referencedDataBaselineGoodOnly(1:512,indices, bl)';
-% eegplotbytime2021(mean_bl, 512, 200, [], 0, [0.3 0.3 0.3], 1);
-% title('Baseline - 4 mm BPRR')
-% set(gca, 'FontWeight', 'normal')
-% 
-% nexttile
-% mean_spike_sub = referencedDataSubSampleGoodOnly(1:512,indices, spike)';
-% eegplotbytime2021(mean_spike_sub, 512, 200, [], 0, [0.3 0.3 0.3], 1);
-% title('IED - 8 mm BPRR')
-% set(gca, 'FontWeight', 'normal')
-% 
-% nexttile
-% mean_bl_sub = referencedDataBaselineSubSampleGoodOnly(1:512,indices, bl)';
-% eegplotbytime2021(mean_bl_sub, 512, 200, [], 0, [0.3 0.3 0.3], 1);
-% title('Baseline - 8 mm BPRR')
-% set(gca, 'FontWeight', 'normal')
-% 
-% %}
