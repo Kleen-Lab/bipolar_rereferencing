@@ -1,8 +1,8 @@
 
 function [mDiff,mb_m,mARb_m,binz,frx]=bipolarexpedition_EachVsAll_StimSpeech(pt,nchtocheck,windowstocheck)
 % BIPOLAR PAIR ANALYSIS: EACH VS. ALL
-% see loopbipolarexpedition.m to loop across patients and analyze
 % EC175 and EC183 both have intact 16x16 square grids (channel #s 1:256)
+% THIS performs TRIAL WISE, CHANNEL AGGREGATED testing 
 
 savePlots = true;
 pts = {'EC175','EC183'};

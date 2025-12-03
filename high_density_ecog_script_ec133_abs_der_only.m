@@ -2,6 +2,10 @@
 %UPDATED HIGH DENSITY ECOG PULL
 %function high_density_ecog_script
 
+% this implements ONE SIDED permutation testing for the line length and
+% absolute derivative data 
+
+
 %% load data
 doPlotIndSubj = true;
 makeEqualTrials = false;

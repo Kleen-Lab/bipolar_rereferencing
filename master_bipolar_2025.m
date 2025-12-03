@@ -47,6 +47,8 @@ bipolar_electrodemaps_2025_revised;
 %% Figure 5: BPRR distance in STG during active listening
 
 % run analysis and save data for patient plotting
+% this implements TRIAL WISE permutation testing, aggregated across
+% channels
 
 bipolarexpedition_EachVsAll_StimSpeech('EC175');
 bipolarexpedition_EachVsAll_StimSpeech('EC183');
@@ -55,11 +57,16 @@ bipolarexpedition_EachVsAll_StimSpeech('EC183');
 fig5_out;
 
 %% Figure 6: IED detection with HD vs subsampled
+% this implements ONE SIDED permutation testing for the line length and
+% absolute derivative data 
 
 high_density_ecog_script;
 postHocStats;
 
 %% Figures 6: part B - specific subject 
+
+% this implements ONE SIDED permutation testing for the line length and
+% absolute derivative data 
 
 high_density_ecog_script_ec133_abs_der_only;
 
